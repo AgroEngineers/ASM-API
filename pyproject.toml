@@ -1,0 +1,7 @@
+[project]
+name = "ASM"
+version = "1.0.0"
+dependencies = [
+    "numpy==1.26.4",
+    "opencv-python"
+]
