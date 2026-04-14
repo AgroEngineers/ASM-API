@@ -2,13 +2,9 @@ from abc import abstractmethod
 from enum import Enum
 from typing import Union
 
+import numpy
+
 from asm.api.base import ASMBase, ContainerParameterResults
-
-
-class Direction(Enum):
-    STOP = 0
-    FORWARD = 1
-    BACKWARD = 2
 
 
 class AvailableDevices:
@@ -26,11 +22,15 @@ class ASMHardware(ASMBase):
         pass
 
     @abstractmethod
-    def connect_camera(self, port: int) -> bool:
+    def canvas(self) -> str:
         pass
 
     @abstractmethod
-    def connect_machine(self, port: int) -> bool:
+    def process(self) -> Union[list[ContainerParameterResults], None]:
+        pass
+
+    @abstractmethod
+    def connect_camera(self, port: str) -> bool:
         pass
 
     @abstractmethod
@@ -38,21 +38,37 @@ class ASMHardware(ASMBase):
         pass
 
     @abstractmethod
+    def frame(self) -> numpy.ndarray:
+        pass
+
+    @abstractmethod
+    def connect_machine(self, port: str) -> bool:
+        pass
+
+    @abstractmethod
     def disconnect_machine(self) -> None:
         pass
 
     @abstractmethod
-    def set_direction(self, direction: Direction) -> None:
+    def get_available_gates(self) -> int:
+        pass
+
+    @abstractmethod
+    def get_available_gate_states(self) -> list[str]:
+        pass
+
+    @abstractmethod
+    def get_current_states(self) -> dict[int, str]:
+        pass
+
+    @abstractmethod
+    def set_gate(self, gate: int, state: str) -> None:
+        pass
+
+    @abstractmethod
+    def set_direction(self, direction: str) -> None:
         pass
 
     @abstractmethod
     def set_container(self, container: int) -> None:
-        pass
-
-    @abstractmethod
-    def canvas(self) -> str:
-        pass
-
-    @abstractmethod
-    def process(self) -> Union[list[ContainerParameterResults], None]:
         pass

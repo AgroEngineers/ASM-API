@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from enum import Enum
+from modulefinder import Module
 from typing import Union, Dict, List
 
 
@@ -19,7 +20,7 @@ class ModuleRequirementVersionPolicy(Enum):
     HIGHER = 2
 
 
-ConfigurationPattern = Union[
+ModuleConfigurationPattern = Union[
     str,
     float,
     bool,
@@ -95,7 +96,7 @@ class ModuleRequirement:
 
 
 class ModuleConfiguration:
-    def __init__(self, configuration: Dict[str, ConfigurationPattern]):
+    def __init__(self, configuration: Dict[str, ModuleConfigurationPattern]):
         self.configuration = configuration
 
     def __str__(self):
@@ -112,6 +113,17 @@ class ModuleInformation:
         self.parameters = parameters
         self.web_spec = web_spec
         self.configuration_pattern = configuration_pattern
+
+    def get_requirements_as_str(self) -> str:
+        requirements_as_str = ""
+        for requirement in self.requirements:
+            req_version: str = ""
+
+            if requirement.policy != ModuleRequirementVersionPolicy.ANY:
+                req_version = f"{'==' if requirement.policy == ModuleRequirementVersionPolicy.EQUAL else '>='}{requirement.version}"
+
+            requirements_as_str += f"{requirement.name}{req_version}\n"
+        return requirements_as_str
 
     def __str__(self):
         return f"ModuleInformation({self.name}, {self.version}, {self.requirements}, {self.configuration_pattern}, {self.parameters}, {self.web_spec})"

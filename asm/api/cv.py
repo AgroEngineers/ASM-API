@@ -1,5 +1,6 @@
 from abc import abstractmethod
 from enum import Enum
+from typing import Union
 
 import numpy
 
@@ -18,4 +19,9 @@ class ASMOpenCV(ASMBase):
 
     @abstractmethod
     def process(self, frame: numpy.ndarray) -> list[ContainerParameterResults]:
+        pass
+
+class ASMOpenCVDetector(ASMBase):
+    @abstractmethod
+    def process(self, frame: numpy.ndarray) -> tuple[bool, float, float, float, float]:
         pass
