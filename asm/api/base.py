@@ -162,5 +162,5 @@ class ASMBase(ABC):
         pass
 
     @abstractmethod
-    def task(self, task: ModuleTask, task_input: ModuleTaskInput) -> ModuleTaskOutput:
+    def task(self, task: ModuleTask, task_input: ModuleTaskInput) -> Union[ModuleTaskOutput, None]:
         pass
