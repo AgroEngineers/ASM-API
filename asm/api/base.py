@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 from enum import Enum
-from modulefinder import Module
 from typing import Union, Dict, List
 
 import numpy
