@@ -53,7 +53,7 @@ class ASMAI(ASMBase):
         pass
 
     @abstractmethod
-    def available_labels(self, labels: Path) -> list[str]:
+    def available_labels(self) -> list[str]:
         """
         Return available labels for model
 
