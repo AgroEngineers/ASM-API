@@ -12,6 +12,15 @@ class FrameType(Enum):
     OBJECT = 1
 
 
+class DetectedObject:
+    def __init__(self, detected: bool, xmin: float, xmax: float, ymin: float, ymax: float):
+        self.detected = detected
+        self.xmin = xmin
+        self.xmax = xmax
+        self.ymin = ymin
+        self.ymax = ymax
+
+
 class ASMOpenCV(ASMBase):
     @abstractmethod
     def frame_type(self) -> FrameType:
@@ -21,7 +30,8 @@ class ASMOpenCV(ASMBase):
     def process(self, frame: numpy.ndarray) -> list[ContainerParameterResults]:
         pass
 
+
 class ASMDetector(ASMBase):
     @abstractmethod
-    def process(self, frame: numpy.ndarray) -> tuple[bool, float, float, float, float]:
+    def process(self, frame: numpy.ndarray) -> Union[DetectedObject, None]:
         pass
