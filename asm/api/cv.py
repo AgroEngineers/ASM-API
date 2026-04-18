@@ -21,7 +21,7 @@ class ASMOpenCV(ASMBase):
     def process(self, frame: numpy.ndarray) -> list[ContainerParameterResults]:
         pass
 
-class ASMOpenCVDetector(ASMBase):
+class ASMDetector(ASMBase):
     @abstractmethod
     def process(self, frame: numpy.ndarray) -> tuple[bool, float, float, float, float]:
         pass
