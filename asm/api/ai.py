@@ -81,7 +81,7 @@ class ASMAI(ASMBase):
         pass
 
     @abstractmethod
-    def load(self, model: Path, labels: Path) -> bool:
+    def load(self, model: Path, labels: Union[Path, None]) -> bool:
         """
         Load model and return load result (Success or failure)
 
