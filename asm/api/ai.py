@@ -8,7 +8,7 @@ from asm.api.base import ASMBase, ContainerParameterResults
 
 
 class AIResult:
-    def __init__(self, model: str, label: str):
+    def __init__(self, model: str, label: Union[str, None] = None):
         """
         Saves AI result
 
@@ -25,7 +25,7 @@ class AIResult:
 
 
 class AIExpansion:
-    def __init__(self, labels_expansion: list[str], model_expansion: list[str]):
+    def __init__(self, model_expansion: list[str], labels_expansion: Union[list[str], None] = None):
         """
         Labels and models file expansions
 
@@ -67,7 +67,7 @@ class ASMAI(ASMBase):
         pass
 
     @abstractmethod
-    def process(self, frame: numpy.ndarray) -> tuple[AIResult, Union[list[ContainerParameterResults], None]]:
+    def process(self, frame: numpy.ndarray) -> tuple[Union[AIResult, None], Union[list[ContainerParameterResults], None]]:
         """
         Return AI result with parameters
 

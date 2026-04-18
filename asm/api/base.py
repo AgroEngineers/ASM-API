@@ -135,9 +135,9 @@ class ModuleConfiguration:
 
 
 class ModuleInformation:
-    def __init__(self, name: str, version: str, requirements: list[ModuleRequirement],
-                 configuration_pattern: ModuleConfiguration, parameters: list[ContainerParameter],
-                 tasks: list[ModuleTask], web_spec: Union[ContainerParameterWebSpec, None] = None):
+    def __init__(self, name: str, version: str, requirements: Union[list[ModuleRequirement], None] = None,
+                 configuration_pattern: Union[ModuleConfiguration, None] = None, parameters: Union[list[ContainerParameter], None] = None,
+                 tasks: Union[list[ModuleTask], None] = None, web_spec: Union[ContainerParameterWebSpec, None] = None):
         self.name = name
         self.id = name.lower().replace(" ", "_").replace("/", "_").replace("\\", "_")
         self.version = version
