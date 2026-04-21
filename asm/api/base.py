@@ -18,8 +18,12 @@ class ContainerParameterWebSpecAlignment(Enum):
 class ModuleRequirementVersionPolicy(Enum):
     ANY = 0
     EQUAL = 1
-    HIGHER = 2
 
+class ModuleType(Enum):
+    Hardware = "hw"
+    OpenCV = "cv"
+    AI = "ai"
+    ObjectDetector = "od"
 
 ModuleConfigurationPattern = Union[
     str,
