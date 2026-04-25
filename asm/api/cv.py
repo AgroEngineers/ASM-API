@@ -27,11 +27,11 @@ class ASMOpenCV(ASMBase):
         pass
 
     @abstractmethod
-    def process(self, frame: numpy.ndarray) -> list[ContainerParameterResults]:
+    async def process(self, frame: numpy.ndarray) -> list[ContainerParameterResults]:
         pass
 
 
 class ASMDetector(ASMBase):
     @abstractmethod
-    def process(self, frame: numpy.ndarray) -> Union[DetectedObject, None]:
+    async def process(self, frame: numpy.ndarray) -> Union[DetectedObject, None]:
         pass

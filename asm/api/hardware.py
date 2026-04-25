@@ -22,6 +22,14 @@ class ASMHardware(ASMBase):
         pass
 
     @abstractmethod
+    def is_camera_connected(self) -> bool:
+        pass
+
+    @abstractmethod
+    def is_machine_connected(self) -> bool:
+        pass
+
+    @abstractmethod
     def canvas(self) -> str:
         pass
 
@@ -30,11 +38,11 @@ class ASMHardware(ASMBase):
         pass
 
     @abstractmethod
-    def connect_camera(self, port: str) -> bool:
+    async def connect_camera(self, port: str) -> bool:
         pass
 
     @abstractmethod
-    def disconnect_camera(self) -> None:
+    async def disconnect_camera(self) -> None:
         pass
 
     @abstractmethod
@@ -42,11 +50,11 @@ class ASMHardware(ASMBase):
         pass
 
     @abstractmethod
-    def connect_machine(self, port: str) -> bool:
+    async def connect_machine(self, port: str) -> bool:
         pass
 
     @abstractmethod
-    def disconnect_machine(self) -> None:
+    async def disconnect_machine(self) -> None:
         pass
 
     @abstractmethod
@@ -71,4 +79,12 @@ class ASMHardware(ASMBase):
 
     @abstractmethod
     def set_container(self, container: int) -> None:
+        pass
+
+    @abstractmethod
+    def get_container_count(self) -> int:
+        pass
+
+    @abstractmethod
+    def get_forward_direction(self) -> int:
         pass

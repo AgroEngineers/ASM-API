@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from enum import Enum
-from typing import Union, Dict, List
+from typing import Union, Dict, List, Optional
 
 import numpy
 
@@ -19,11 +19,13 @@ class ModuleRequirementVersionPolicy(Enum):
     ANY = 0
     EQUAL = 1
 
+
 class ModuleType(Enum):
     Hardware = "hw"
     OpenCV = "cv"
     AI = "ai"
     ObjectDetector = "od"
+
 
 ModuleConfigurationPattern = Union[
     str,
@@ -36,8 +38,8 @@ ModuleConfigurationPattern = Union[
 ]
 
 
-class ContainerParameterWebSpec:
-    def __init__(self, html: str, css: str, alignment: ContainerParameterWebSpecAlignment):
+class ContainerParameterGroupWebSpec:
+    def __init__(self, html: str, alignment: ContainerParameterWebSpecAlignment, css: Optional[str] = ""):
         """
         ContainerParameterWebSpec put HTML and CSS code in parameters table in WebUI
 
@@ -58,8 +60,16 @@ class ContainerParameterWebSpec:
         return f"ContainerParameterWebSpec({self.html}, {self.css}, {self.alignment})"
 
 
+class ContainerParameterGroup:
+    def __init__(self, name: str, parameter_type: ContainerParameterType,
+                 web_spec: ContainerParameterGroupWebSpec = None):
+        self.name = name
+        self.parameter_type = parameter_type
+        self.web_spec = web_spec
+
+
 class ContainerParameter:
-    def __init__(self, name: str, parameter_type: ContainerParameterType, web_spec: ContainerParameterWebSpec = None):
+    def __init__(self, name: str, group: ContainerParameterGroup):
         """
         ContainerParameter request for return sort parameters
 
@@ -67,56 +77,66 @@ class ContainerParameter:
             input: ContainerParameter("red", ContainerParameterType.RANGE)
         """
         self.name = name
-        self.type = parameter_type
-        self.web_spec = web_spec
+        self.group = group
 
     def __str__(self):
-        return f"ContainerParameter({self.name}, {self.type})"
+        return f"ContainerParameter({self.name}, {self.group.name})"
 
 
 class ContainerParameterResults:
-    def __init__(self, name: str, result: Union[int, str]):
+    def __init__(self, parameter: ContainerParameter, result: Union[int, str]):
         """
         Result of ContainerParameter, name must be same with ContainerParameter
 
         Example:
             input: ContainerParameterResult("red", 123)
         """
-        self.name = name
+        self.parameter = parameter
         self.result = result
 
     def __str__(self):
-        return f"ContainerParameterResult({self.name}, {self.result})"
+        return f"ContainerParameterResult({self.parameter.name}, {self.result})"
+
+
+class CustomContainerParameter:
+    def __init__(self, parameter_id: str):
+        self.parameter_id = parameter_id
+
+
+class ModuleTaskData(Enum):
+    FRAME = "frame"
 
 
 class ModuleTaskInputPattern:
-    def __init__(self, request_frame: bool, task_input: ModuleConfigurationPattern):
-        self.request_frame = request_frame
-        self.task_input = task_input
+    def __init__(self, data: list[Union[ModuleTaskData, CustomContainerParameter]],
+                 user_input: ModuleConfigurationPattern):
+        self.data = data
+        self.user_input = user_input
 
 
 class ModuleTaskOutputPattern:
-    def __init__(self, task_output: ModuleConfigurationPattern):
+    def __init__(self, task_output: ModuleConfigurationPattern, configuration_output: ModuleConfigurationPattern):
         self.task_output = task_output
-
-
-class ModuleTask:
-    def __init__(self, name: str, task_input: ModuleTaskInputPattern, task_output: ModuleTaskOutputPattern):
-        self.name = name
-        self.task_input = task_input
-        self.task_output = task_output
+        self.configuration_output = configuration_output
 
 
 class ModuleTaskInput:
-    def __init__(self, task_input: ModuleTaskInputPattern, frame: Union[numpy.ndarray, None]):
+    def __init__(self, task_input: ModuleTaskInputPattern, data: list[Union[numpy.ndarray, CustomContainerParameter]]):
         self.task_input = task_input
-        self.frame = frame
+        self.data = data
 
 
 class ModuleTaskOutput:
     def __init__(self, task_output: ModuleTaskOutputPattern, update_configuration: ModuleConfigurationPattern):
         self.task_output = task_output
         self.update_configuration = update_configuration
+
+
+class ModuleTask:
+    def __init__(self, name: str, task_input: ModuleTaskInputPattern, task_output: Optional[ModuleTaskOutputPattern] = None):
+        self.name = name
+        self.task_input = task_input
+        self.task_output = task_output
 
 
 class ModuleRequirement:
@@ -140,14 +160,14 @@ class ModuleConfiguration:
 
 class ModuleInformation:
     def __init__(self, name: str, version: str, requirements: Union[list[ModuleRequirement], None] = None,
-                 configuration_pattern: Union[ModuleConfiguration, None] = None, parameters: Union[list[ContainerParameter], None] = None,
-                 tasks: Union[list[ModuleTask], None] = None, web_spec: Union[ContainerParameterWebSpec, None] = None):
+                 configuration_pattern: Union[ModuleConfiguration, None] = None,
+                 parameters: Union[list[ContainerParameter], None] = None,
+                 tasks: Union[list[ModuleTask], None] = None):
         self.name = name
         self.id = name.lower().replace(" ", "_").replace("/", "_").replace("\\", "_")
         self.version = version
         self.requirements = requirements
         self.parameters = parameters
-        self.web_spec = web_spec
         self.configuration_pattern = configuration_pattern
         self.tasks = tasks
 

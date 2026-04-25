@@ -26,7 +26,10 @@ def _load_logfile():
 
 
 def log(content: str, log_type: LogType = LogType.INFO):
-    log_str = f"[{log_type.value}] <{datetime.datetime.now()}>: {content}"
+    if content == "":
+        log_str = f"[EMPTY LINE]"
+    else:
+        log_str = f"[{log_type.value}] <{datetime.datetime.now()}>: {content}"
     print(log_str)
     with open(logfile, 'a') as f:
         f.write(log_str + "\n")
