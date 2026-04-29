@@ -8,6 +8,7 @@ import numpy
 class ContainerParameterType(Enum):
     STRING = "string"
     RANGE = "range"
+    TOGGLE = "toggle"
 
 
 class ContainerParameterWebSpecAlignment(Enum):
@@ -25,6 +26,10 @@ class ModuleType(Enum):
     OpenCV = "cv"
     AI = "ai"
     ObjectDetector = "od"
+
+
+class ModuleTaskData(Enum):
+    FRAME = "frame"
 
 
 ModuleConfigurationPattern = Union[
@@ -86,10 +91,10 @@ class ContainerParameter:
 class ContainerParameterResults:
     def __init__(self, parameter: ContainerParameter, result: Union[int, str]):
         """
-        Result of ContainerParameter, name must be same with ContainerParameter
+        Result of ContainerParameter
 
-        Example:
-            input: ContainerParameterResult("red", 123)
+        :param parameter: Original parameter
+        :param result: Result
         """
         self.parameter = parameter
         self.result = result
@@ -101,10 +106,6 @@ class ContainerParameterResults:
 class CustomContainerParameter:
     def __init__(self, parameter_id: str):
         self.parameter_id = parameter_id
-
-
-class ModuleTaskData(Enum):
-    FRAME = "frame"
 
 
 class ModuleTaskInputPattern:
@@ -133,7 +134,8 @@ class ModuleTaskOutput:
 
 
 class ModuleTask:
-    def __init__(self, name: str, task_input: ModuleTaskInputPattern, task_output: Optional[ModuleTaskOutputPattern] = None):
+    def __init__(self, name: str, task_input: ModuleTaskInputPattern,
+                 task_output: Optional[ModuleTaskOutputPattern] = None):
         self.name = name
         self.task_input = task_input
         self.task_output = task_output
